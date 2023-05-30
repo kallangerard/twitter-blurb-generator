@@ -8,13 +8,13 @@ Let's begin with some of the basic concepts about tools and technologies we are 
 
 ### What is Next.js?
 
-Next.js is a popular React framework that provides built-in [server-side rendering (SSR)](https://nextjs.org/learn/foundations/how-nextjs-works/rendering) capabilities. It combines the power of server-side rendering, static site generation, and client-side rendering, offering a versatile framework for building performant and scalable web applications. Its simplicity, performance optimizations, and robust feature set make it a compelling choice for developers and organizations seeking to build modern web applications.
+Next.js is a popular React framework that provides built-in [server-side rendering (SSR)](https://nextjs.org/learn/foundations/how-nextjs-works/rendering) capabilities. It combines the power of server-side rendering, static site generation, and client-side rendering (CSR), offering a versatile framework for building performant and scalable web applications. Its simplicity, performance optimizations, and robust feature set make it a compelling choice for developers and organizations seeking to build modern web applications.
 
-#### ServerSide Rendering
+#### Server-Side Rendering
 
 Recently Server side rendering has been getting more and more attraction among the web development community and that is thanks to React and its built-in server-side hydration features. Before we begin, let's just first step back to understand the difference. The main difference between the two is where the web content is rendered. On CSR approach the page content is rendered on the client browser using JavaScript for dynamic rendering vs with the SSR approach the content is fully rendered on the server and sent to the client.
 
-Why should you use Server Side Rendering?
+Why should you use Server-Side Rendering?
 
 1. Server-side rendering delivers fully rendered HTML to the client, which leads to faster initial page loads compared to client-side rendering.
 2. Search engines typically have difficulty parsing and indexing client-rendered JavaScript content. With server-side rendering, the initial HTML is sent to the client, making it easier for search engine crawlers to read and index the content. This can positively impact the visibility and ranking of your website in search engine results.
@@ -274,7 +274,7 @@ export default function Home() {
 +  function generateBlurb(): void {
 +    throw new Error("Function not implemented.");
 +  }
-
+  const blurbRef = useRef("");
   return (
     <Stack
       component="main"
@@ -361,13 +361,14 @@ If you wanted to deploy this application using AWS services, you would have had 
 5. Authorize Vercel to connect to your GitHub account <br/>
    Make sure to configure the permissions correctly
    ![github authorization](content/github-authorization.png)
-6. Click `Import` next to your Git repository
-7. Click on the `Build and Output Settings` accordion.
-8. Under `Build Command`, enable the override toggle and enter `pnpm build`
-9. Under `Install Command`, enable the override toggle and enter `pnpm install`
+1. Click `Import` next to your Git repository
+1. Ensure `Framework Preset` is `Next.js`
+1. Click on the `Build and Output Settings` accordion.
+1. Under `Build Command`, enable the override toggle and enter `pnpm build`
+1. Under `Install Command`, enable the override toggle and enter `pnpm install`
    ![vercel-settings](content/vercel-settings.png)
-10. Click `Deploy`
-11. Once the application has been deployed, click on the image below `Continue to Dashboard` to view your deployed application<br/>
+1. Click `Deploy`
+1. Once the application has been deployed, click on the image below `Continue to Dashboard` to view your deployed application<br/>
     ![deployed-app](content/deployed-app.png)
 
 Congratulations you have now completed Module1 and ready to move on to the second module. Your completed app should look like this: [Module1-final demo](final-demo/latency-workshop-app/). <br/>
