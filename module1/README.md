@@ -54,7 +54,7 @@ Start the development server: Now, you can start the development server and run 
 pnpm dev
 ```
 
-This command will start the development server and provide you with a local URL (e.g., http://localhost:3000) where you can view your app.
+This command will start the development server and provide you with a local URL (e.g., <http://localhost:3000>) where you can view your app.
 
 <!-- ![Hello world app](./content/vercel_splash.png) -->
 
@@ -71,7 +71,6 @@ pnpm install @mui/material @emotion/react @emotion/styled
 ```
 
 Now let's go to pages/index.ts and replace everything with the following. Execute `pnpm dev` to check your latest changes
-
 
 ```typescript
 import { Typography } from "@mui/material";
@@ -355,11 +354,11 @@ If you wanted to deploy this application using AWS services, you would have had 
 
 ### Setting Up Vercel
 
-1. Go to https://vercel.com/
-1. Click on the `Sign Up` button
-1. Select `Hobby`. Enter your name. Click Continue
-1. Click `Continue with GitHub`
-1. Authorize Vercel to connect to your GitHub account <br/>
+1. Go to <https://vercel.com/>
+2. Click on the `Sign Up` button
+3. Select `Hobby`. Enter your name. Click Continue
+4. Click `Continue with GitHub`
+5. Authorize Vercel to connect to your GitHub account <br/>
    Make sure to configure the permissions correctly
    ![github authorization](content/github-authorization.png)
 1. Click `Import` next to your Git repository
