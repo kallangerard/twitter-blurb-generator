@@ -6,35 +6,45 @@ In this module, our primary focus will be on establishing an API endpoint for yo
 
 We will then delve into the process of refining our input parameters for the OpenAI API, ensuring that the generated output aligns more closely with our desired context and requirements.
 
-If you've had issues so far, clone from [Module1]().
+If you've had issues so far, clone from [Module1](/module1/final-demo).
+
+</br>
 
 ## Contents
 
-2.1 Creating a NextJs API endpoint and Connecting to ChatGPT
-<br>
-2.2 Serverless VS Streaming
-<br>
-2.3 Prompt Engineering
-<br>
-2.4 Refactoring into Components
-<br>
-2.5 Challenge: Add in dropdown choices to set the prompt vibe
+2.1 [Creating a NextJs API endpoint and Connecting to ChatGPT](#21-creating-a-nextjs-api-endpoint-and-connecting-to-chatgpt)
+</br>
+2.2 [Creating a Card to display the OpenAI Output](#22-creating-a-card-to-display-the-openai-output)
+</br>
+2.3 [Serverless VS Streaming](#23-streaming-vs-serverless)
+</br>
+2.4 [Prompt Engineering](#24-prompt-engineering)
+</br>
+2.5 [String manipulation to output multiple cards](25-string-manipulation-to-output-multiple-cards)
+</br>
+2.5 [Refactoring into Components](#26-refactoring-into-components)
+</br>
+2.6 [Challenge: Add in dropdown choices to set the prompt vibe](#27-challenge)
 
-## 2.1.1: Creating an api endpoint in Next.js
+</br>
 
----
+## 2.1 Creating a NextJs API endpoint and Connecting to ChatGPT
+
+Before we get to ChatGPT api, we will have to create an API route in Next.js. This will create a server component that helps to protect your API secrets. So your client browser does not need to know about your ChatGPT api key.
+
+### 2.1.1: Creating an api endpoint in Next.js
 
 A great advantage of using Next.js is that we can handle both the frontend and backend in a single application. In Next.js, you can create APIs using API routes, a built-in feature that allows you to define server-side endpoints within your Next.js application.
 
 Let's now get started to create a [new API in NextJs](https://nextjs.org/learn/basics/api-routes/creating-api-routes):
 
-### <u>Step 1: Create an API route</u>
+### Step 1: Create an API route
 
 <details>
-   <summary><span style="color:red"><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 - In your Next.js project, navigate to the `pages/api` directory.
-- Create a new file named generateBlurb.ts (This file will represent your API route)
+- Create a new file named generateBlurb.ts - This file will represent your API route (feel free to delete hello.ts)
 - Define the API logic: Inside the API route file, you can define the logic for your API. You can handle HTTP requests, process data, and return responses.
 
   ```ts
@@ -54,14 +64,14 @@ Let's now get started to create a [new API in NextJs](https://nextjs.org/learn/b
 
 <br>
 
-### <u>2.1.2: Linking the frontend to our API</u>
+### 2.1.2: Linking the frontend to our API
 
 Now, you can make requests to your API from client-side code, server-side code, or any other applications. You can use JavaScript's built-in fetch function or any other HTTP client libraries to make requests to your API endpoint. </br></br>
 
 In your previous module, you have created a button in your homepage with an empty function click called `generateBlurb()`. Let's now go and replace that function's implementation with a call to our api endpoint.
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```ts
 async function generateBlurb() {
@@ -79,11 +89,11 @@ async function generateBlurb() {
 }
 ```
 
+You can now run your application and see the console.log after the button click.
+
 </details>
 
-</br>
-
-### <u>2.1.3: Connecting OpenAI to our API</u>
+### 2.1.3: Connecting OpenAI to our API
 
 Before we get to the development, let's find out what is OpenAI and how should you use it?
 
@@ -98,7 +108,7 @@ Next.js provides native support for managing environment variables, offering the
 1. You can easily load your environment variables by storing them into a .env.local file
 2. You can expose your environment variables to the browser by prefixing them with NEXT*PUBLIC*
 
-In order to access the openAI key in your app, create a new file in the project root folder and name it .env.local.
+In order to access the openAI key in your app, create a new file in the project root folder and name it .env.local
 
 ```text
 OPENAI_API_KEY=xyzxyzxyzxyz
@@ -106,11 +116,9 @@ OPENAI_API_KEY=xyzxyzxyzxyz
 
 Now you should be able to access this key in your app by using `process.env.OPENAI_API_KEY`
 
----
+### 2.1.4: Connecting generateBlurb.ts to call OpenAI
 
-## 2.2: Connecting generateBlurb.ts to call OpenAI
-
-We get the prompt from the request body that is passed in from the frontend. In this payload we have to specify the api parameters needed by gpt3.5.
+To do this, we have to get the prompt from the request body that is passed in from the frontend and send it to OpenAI call. We will also need to to specify the api parameters needed by gpt3.5.
 
 After the payload is constructed, we send it in a POST request to OpenAI, await the result to get back the generated bios, then we send that back to the client as JSON
 
@@ -119,7 +127,7 @@ Resources:
 - [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```ts
 import { NextApiRequest, NextApiResponse } from "next";
@@ -161,11 +169,9 @@ export default handler;
 
 </details>
 
----
-
 <br>
 
-Now lets update our frontend to receive the response from the API. For now, we will just log the output to the console.
+Now lets update our frontend to display the response from the API. So far we were just logging the output to the console.
 
 Before we change our generateBlurb function, we will need to extract the current value from our textbox and store it somewhere. To do this, we are using useRef function from react.
 
@@ -181,32 +187,70 @@ const blurbRef = useRef("");
 
 Make sure to import useRef from react. ```import { useRef } from "react";```
 
-Next step is to connect your textbox to the blurbRef reference that you just created.
-
-We accomplish this by adding a `onChange` event to the textbox, and updating the blurbRef.current value.  
+Next step is to connect your textbox to the blurbRef reference that you just created. We accomplish this by adding a `onChange` event to the textbox, and updating the blurbRef.current value.  
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
-```ts
-  <TextField
-    multiline
-    fullWidth
-    minRows={4}
-    onChange={(e) => {
-      blurbRef.current = e.target.value;
-    }}
-    sx={{ "& textarea": { boxShadow: "none !important" } }}
-    placeholder="Key words on what you would like your blurb to be about"
-  ></TextField>
+```diff
+import { Typography, Stack, TextField, Button } from "@mui/material";
++ import { useRef } from "react";
+
+export default function Home() {
++  const blurbRef = useRef("");
+  async function generateBlurb() {
+    const response = await fetch("/api/generateBlurb", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: "This is an empty prompt",
+      }),
+    });
+    const data = await response.json();
+    console.log("Response was:", JSON.stringify(data));
+  }
+
+  return (
+    <Stack
+      component="main"
+      direction="column"
+      maxWidth="50em"
+      mx="auto"
+      alignItems="center"
+      justifyContent="center"
+      py="1em"
+      spacing="1em"
+    >
+      <Typography
+        variant="h1"
+        className="bg-gradient-to-br from-black to-stone-400 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[5rem]"
+      >
+        Generate your next Twitter post with ChatGPT
+      </Typography>
+      <TextField
+        multiline
+        fullWidth
+        minRows={4}
++        onChange={(e) => {
++          blurbRef.current = e.target.value;
++        }}
+        sx={{ "& textarea": { boxShadow: "none !important" } }}
+        placeholder="Key words on what you would like your blurb to be about"
+      ></TextField>
+      <Button onClick={generateBlurb}>Generate Blurb</Button>
+    </Stack>
+  );
+}
 ```
 
 </details>
-
+</br>
 Now you need to update your generateBlurb function to use the blurbRef.current value.
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```diff
 - async function generateBlurb() {
@@ -242,11 +286,9 @@ Thats it! we've built the first version of our application. However we are only 
 
 Lets create a output now for this to display.
 
----
+</br>
 
-<br>
-
-## 2.3 Creating a Card to display the OpenAI Output
+## 2.2 Creating a Card to display the OpenAI Output
 
 Now we've got a actual response from openAI, lets display it in our app.
 
@@ -257,7 +299,7 @@ You will need the following things
 
 <details>
 
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 Add the following to your code.
 
@@ -300,7 +342,7 @@ Next step is to update our state with the response from OpenAi
 Resources: [React Use State](https://www.w3schools.com/react/react_usestate.asp)
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 Add the following to your code.
 
@@ -336,9 +378,9 @@ Add the following to your code.
 Congrats, you should now be seeing the response from OpenAI using our prompt.
 <br>
 
----
+</br>
 
-## 2.4 Streaming Vs Serverless
+## 2.3 Streaming Vs Serverless
 
 Whilst this approach works, there are limitations to a serverless function.
 
@@ -517,7 +559,6 @@ Lets see what we just did:
 1. It sends a post request to OpenAI with the payload like we did before with the serverless version.
 2. We then create a stream to contionly parse the data we're recieving from OpenAi, continoisly checking for `[DONE]`. This will tell us the stream has completed.
 
----
 
 ### Connecting frontend to our API
 
@@ -530,7 +571,7 @@ Heres some hints to get you started.
 - <https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/getReader>
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
   
   In ```pages/index.ts``` make the following changes in the ```generateBlurb``` function:
 
@@ -572,9 +613,7 @@ You should now have a streaming response!!
 
 <br>
 
----
-
-<br>
+</br>
 
 ## 2.4 Prompt Engineering
 
@@ -601,7 +640,7 @@ Prompt engineering can be quite complex because language models don't actually u
 <br>
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```diff
 
@@ -638,9 +677,8 @@ Feel free to manipulate and add in your own changes.
 
 </details>
 
-<br>
 
----
+</br>
 
 ## 2.5 String manipulation to output multiple cards
 
@@ -653,7 +691,7 @@ Resources:
 - [String Splitting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split)
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```diff
       {generatedBlurb && (
@@ -697,7 +735,7 @@ In short, the code splits a text string into parts at "1.", "2.", and "3.", and 
 Why is this occuring? Have a go and trying to fix it.
 
 <details>
-   <summary><span style="color:red">Solution</summary>
+   <summary>Solution</summary>
 
 ```diff
     let done = false
@@ -721,9 +759,7 @@ Why is this occuring? Have a go and trying to fix it.
 
 </details>
 
----
-
-<br>
+</br>
 
 ## 2.6 Refactoring into Components
 
@@ -776,9 +812,11 @@ export function Blurb({ generatingBlurb }: Props) {
       ...
 ```
 
-   </details>
+</details>
 
-## 2.7 Challenge: Add in dropdown choices dynamically change the audience type
+## 2.7 Challenge
+
+### Add in dropdown choices dynamically change the audience type
 
 Currently, the student audience is hardcoded into our prompt. Can you create a drop down to dynamically change the audience type?
 
@@ -788,14 +826,14 @@ Resources:
 - [React Use Ref](https://www.w3schools.com/react/react_useref.asp)
 
 <details>
-   <summary><span style="color:red">Solution</summary>
-
+   <summary>Solution</summary>
 
 Create a new ref for Audience Type
 ```ts
 const audienceRef = useRef<HTMLInputElement>();
 
 ```
+
 Change the prompt to include the audience type
 
 ```ts

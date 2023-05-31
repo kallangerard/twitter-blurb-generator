@@ -94,14 +94,17 @@ In `./styles/globals.css`
 -@media (prefers-color-scheme: dark) {
 +@media (prefers-color-scheme: light) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
++    --foreground-rgb: 0, 0, 0;
++    --background-start-rgb: 214, 219, 220;
++    --background-end-rgb: 255, 255, 255;
+-    --foreground-rgb: 255, 255, 255;
+-    --background-start-rgb: 0, 0, 0;
+-    --background-end-rgb: 0, 0, 0;
   }
 }
 ```
 
-Create a new file `./styles/theme.ts` and below codeblock in it.
+Create a new file `./styles/theme.ts` and add below codeblock in it.
 
 ```css
 import { Roboto } from "next/font/google";
@@ -191,45 +194,42 @@ export default function Home() {
 
 This still is not looking quite right. So lets wrap this in a Stack to get it centred as we would like.
 
-```diff
-- import { Typography } from "@mui/material";
-+ import { Typography, Stack } from "@mui/material";
+```ts
+import { Typography, Stack } from "@mui/material";
 
 export default function Home() {
   return (
-+   <Stack
-+     component="main"
-+     direction="column"
-+     maxWidth="50em"
-+     mx="auto"
-+     alignItems="center"
-+     justifyContent="center"
-+     py="1em"
-+     spacing="1em"
-+   >
+    <Stack
+      component="main"
+      direction="column"
+      maxWidth="50em"
+      mx="auto"
+      alignItems="center"
+      justifyContent="center"
+      py="1em"
+      spacing="1em"
+    >
       <Typography
         variant="h1"
         className="bg-gradient-to-br from-black to-stone-400 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[5rem]"
       >
         Generate your next Twitter post with ChatGPT
       </Typography>
-+   </Stack>
+   </Stack>
   );
 }
 ```
 
-Let’s quickly go over what we have done. Your homepage should look like the below:
-![home page with the heading](./content/image_1.png)
+Let’s quickly test what we have done. Your homepage should look like the below:</br></br>
+![home page with the heading](./content/home-page.png)
 
 Next step is to add a textbox so people can type what blurb they would like to generate:
 
 ```diff
 - import { Typography, Stack } from "@mui/material";
 + import { Stack, TextField, Typography } from "@mui/material";
-+ import { useRef } from "react";
 
 export default function Home() {
-+ const blurbRef = useRef("");
   return (
     <Stack
       component="main"
@@ -252,9 +252,6 @@ export default function Home() {
 +       multiline
 +       fullWidth
 +       minRows={4}
-+       onChange={(e) => {
-+         blurbRef.current = e.target.value;
-+        }}
 +       sx={{ "& textarea": { boxShadow: "none !important" } }}
 +       placeholder="Key words on what you would like your blurb to be about"
 +     ></TextField>
@@ -268,13 +265,12 @@ Let's now add a button that allows users to generate their blurb and have an emp
 ```diff
 - import { Typography, Stack } from "@mui/material";
 +import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useRef } from "react";
 
 export default function Home() {
 +  function generateBlurb(): void {
 +    throw new Error("Function not implemented.");
 +  }
-  const blurbRef = useRef("");
+
   return (
     <Stack
       component="main"
@@ -297,9 +293,6 @@ export default function Home() {
         multiline
         fullWidth
         minRows={4}
-        onChange={(e) => {
-        blurbRef.current = e.target.value;
-        }}
         sx={{ "& textarea": { boxShadow: "none !important" } }}
         placeholder="Key words on what you would like your blurb to be about"
       ></TextField>
@@ -314,7 +307,7 @@ Congratulations! Your homepage is now completed. It should look like below:
 
 ![Final home page design](content/final-homepage.png)
 
-In this workshop we are not focusing on learning about UI designs, if you are interested to learn more about [Tailwind](https://tailwindcss.com/) and [Material UI](https://mui.com/material-ui/getting-started/overview/) on your own time, feel free so.
+**Note:** In this workshop we are not focusing on learning about UI designs, if you are interested to learn more about [Tailwind](https://tailwindcss.com/) and [Material UI](https://mui.com/material-ui/getting-started/overview/) on your own time, feel free so.
 
 ## Deploying your application into production
 
@@ -371,5 +364,7 @@ If you wanted to deploy this application using AWS services, you would have had 
 1. Once the application has been deployed, click on the image below `Continue to Dashboard` to view your deployed application<br/>
     ![deployed-app](content/deployed-app.png)
 
-Congratulations you have now completed Module1 and ready to move on to the second module. Your completed app should look like this: [Module1-final demo](final-demo/latency-workshop-app/). <br/>
-If you have any issues finishing off module1, you can download the content in `final-demo/latency-workshop-app` and move onto the next module.
+Congratulations you have now completed Module1 and ready to move on to the second module. If you have any issues finishing off module1, you can download the app from [Module1- Final Demo](final-demo/) and move on to the next module.
+
+**Module2** How to connect your frontend application to OpenAI APIs and passing custom prompts ->
+[Get started](/module2/README.md)
